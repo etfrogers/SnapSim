@@ -30,6 +30,7 @@ class SnapSim:
         self.deal()
         finished = False
         turn = 0
+        Nsnaps = 0;
         while not finished:
             turn += 1
             for player in self.players:
@@ -37,22 +38,26 @@ class SnapSim:
                 
                 print('Turn %d' % turn)
                 print(self)
-                self.checkSnaps(player)
-                
+                if self.checkSnaps(player):
+                    Nsnaps +=1
                 time.sleep(1/self.turnsPerSecond)
             finished = not self.anyoneCanPlay()
-        
+        print(Nsnaps)
     def anyoneCanPlay(self):
         return any([p.canPlay() for p in self.players])
             
     def checkSnaps(self, lastPlayer):
         #player who just played against all other piles 
+        didSnap = False
         for player in self.players:
             if player is not lastPlayer:
                 val1 = player.pile[-1].value if len(player.pile) >0 else None
                 val2 = lastPlayer.pile[-1].value #player has just played, so pile is not empty
                 if val1 == val2:
                     self.snap(player, lastPlayer)
+                    didSnap = True
+                    break
+        return didSnap
         
         
     def snap(self, player1, player2):
@@ -79,7 +84,6 @@ def main():
     sim = SnapSim(2,8,4)
    
     sim.run()
-    print(sim)
     
     
 if __name__ == '__main__':
