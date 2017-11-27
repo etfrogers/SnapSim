@@ -25,7 +25,7 @@ class Player:
         try:
             topcard = str(self.pile[-1])
         except IndexError:
-            topcard = '     '
+            topcard = '  '
             
         return      ('%3d  ' % len(self.hand),
                      '     ',
