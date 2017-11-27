@@ -12,7 +12,7 @@ import time
 
 class SnapSim:
     
-    turnsPerSecond = 50
+    turnsPerSecond = 500
     
     def __init__(self, Nplayers, Nvals, Ncolors):
         
@@ -28,21 +28,35 @@ class SnapSim:
     
     def run(self):
         self.deal()
-        finished = False
-        turn = 0
-        Nsnaps = 0;
-        while not finished:
-            turn += 1
-            for player in self.players:
-                player.play()
-                
-                print('Turn %d' % turn)
-                print(self)
-                if self.checkSnaps(player):
-                    Nsnaps +=1
-                time.sleep(1/self.turnsPerSecond)
-            finished = not self.anyoneCanPlay()
-        print(Nsnaps)
+        handFinished = False
+        hand = 0
+        snapList = [];
+        while not handFinished:
+            hand += 1
+            turn = 0
+            Nsnaps = 0
+            roundFinished = False
+            while not roundFinished:
+                turn += 1
+                for player in self.players:
+                    player.play()
+                    
+                    print('Turn %d' % turn)
+                    print(self)
+                    if self.checkSnaps(player):
+                        Nsnaps +=1
+                    time.sleep(1/self.turnsPerSecond)
+                roundFinished = not self.anyoneCanPlay()
+            snapList.append(Nsnaps)
+            handFinished = all([n == 0 for n in snapList[-1:]])
+            self.newHand()
+            print('Hand %d' % hand)
+        print(snapList)
+        
+    def newHand(self):
+        for player in self.players:
+            player.pickupPile()
+        
     def anyoneCanPlay(self):
         return any([p.canPlay() for p in self.players])
             

@@ -19,7 +19,10 @@ class Player:
     def canPlay(self):
         return len(self.hand) > 0
     
-    
+    def pickupPile(self):
+        assert(not self.canPlay())
+        self.hand = self.pile.copy()
+        self.pile = []
     
     def status(self):
         try:
