@@ -66,8 +66,11 @@ class SnapSim:
         for player in self.players:
             if player is not lastPlayer:
                 val1 = player.pile[-1].value if len(player.pile) >0 else None
-                val2 = lastPlayer.pile[-1].value #player has just played, so pile is not empty
-                if val1 == val2:
+                val2 = lastPlayer.pile[-1].value if len(lastPlayer.pile) >0 else None
+                col1 = player.pile[-1].color if len(player.pile) >0 else None
+                col2 = lastPlayer.pile[-1].color if len(lastPlayer.pile) >0 else None
+
+                if (val1 is not None) and ((val1 == val2) or (col1 == col2)):
                     self.snap(player, lastPlayer)
                     didSnap = True
                     break
