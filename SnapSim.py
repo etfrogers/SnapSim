@@ -12,7 +12,7 @@ import time
 
 class SnapSim:
     
-    turnsPerSecond = 500
+    turnsPerSecond = 200
     
     def __init__(self, Nplayers, Nvals, Ncolors):
         
@@ -45,7 +45,8 @@ class SnapSim:
                     print(self)
                     if self.checkSnaps(player):
                         Nsnaps +=1
-                    time.sleep(1/self.turnsPerSecond)
+                    if self.turnsPerSecond<100:
+                        time.sleep(1/self.turnsPerSecond)
                 roundFinished = not self.anyoneCanPlay()
             snapList.append(Nsnaps)
             handFinished = all([n == 0 for n in snapList[-1:]])
