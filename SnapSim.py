@@ -18,6 +18,7 @@ class SnapSim:
         
         self.players = [Player.Player() for ii in range(Nplayers)]
         self.deck = Deck.Deck(Nvals, Ncolors)
+        self.showOutput = False
         
     def deal(self):
         self.deck.shuffle()
@@ -40,9 +41,9 @@ class SnapSim:
                 turn += 1
                 for player in self.players:
                     player.play()
-                    
-                    print('Turn %d' % turn)
-                    print(self)
+                    if self.showOutput:
+                        print('Turn %d' % turn)
+                        self.show()
                     if self.checkSnaps(player):
                         Nsnaps +=1
                     if self.turnsPerSecond<100:
@@ -51,8 +52,10 @@ class SnapSim:
             snapList.append(Nsnaps)
             handFinished = all([n == 0 for n in snapList[-1:]])
             self.newHand()
-            print('Hand %d' % hand)
-        print(snapList)
+            if self.showOutput:
+                print('Hand %d' % hand)
+        if self.showOutput:
+            print(snapList)
         
     def newHand(self):
         for player in self.players:
@@ -79,16 +82,17 @@ class SnapSim:
         
         
     def snap(self, player1, player2):
-        print('SNAP!')
         winner = random.choice(self.players)
         winnerNo = self.players.index(winner)+1
-        print('Winner was player %d' % winnerNo)
-        #TODO switch cards
+        if self.showOutput:
+            print('SNAP!')
+            print('Winner was player %d' % winnerNo)
         winner.hand.insert(0, player1.pile.pop(-1))
         winner.hand.insert(0, player2.pile.pop(-1))
         
     def show(self):
-        print(self)
+        if self.showOutput:
+            print(self) 
         
     def __str__(self):
         string = '';
