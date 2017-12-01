@@ -9,6 +9,7 @@ import Player
 import Deck
 import random
 import time
+import matplotlib.pyplot as plt
 
 class SnapSim:
     
@@ -18,6 +19,7 @@ class SnapSim:
         
         self.players = [Player.Player() for ii in range(Nplayers)]
         self.deck = Deck.Deck(Nvals, Ncolors)
+        self.nSnaps = []
         self.showOutput = False
         
     def deal(self):
@@ -54,6 +56,7 @@ class SnapSim:
             self.newHand()
             if self.showOutput:
                 print('Hand %d' % hand)
+        self.nSnaps = snapList
         if self.showOutput:
             print(snapList)
         
@@ -103,10 +106,18 @@ class SnapSim:
                 
         
 def main():
+    nSims = 100
     sim = SnapSim(2,8,4)
-   
-    sim.run()
+    snaps = []
+    for i in range(nSims):
+        sim.run()
+        snaps.append(sim.nSnaps)
+    print(snaps)
     
+    for snapList in snaps:
+        plt.plot(snapList)
+    #plt.legend()
+    plt.show()
     
 if __name__ == '__main__':
     main()
